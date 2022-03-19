@@ -7,10 +7,10 @@
     class Monster: public Object
     {
     public:
-        Monster() {};
-        Monster(const Player& player);
+        Monster() = default;
+        explicit Monster( std::vector<Object*> gameCharacters );
 
-        void update(Player& player, std::vector<Monster>& monsters) override;
+        void update( std::vector<Object*> ) override;
 
         int attack() const override;
         void defend(int damage) override;

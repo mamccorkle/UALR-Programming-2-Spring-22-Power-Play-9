@@ -41,10 +41,15 @@ void Player::levelUp()
     }
 }
 
-void Player::update(Player& player, std::vector<Monster>& monsters)
+void Player::update( std::vector<Object*> gameCharacters )
 {
-
-    std::cout << "What do you do? (a)ttack (h)eal ";
+    //levelUp();
+    if (gameCharacters.size() == 1 )
+    {
+        levelUp();
+        return;
+    }
+    std::cout << "\nWhat do you do? (a)ttack (h)eal ";
     char command{ 'x' };
     std::cin >> command;
     switch (command)
@@ -52,20 +57,19 @@ void Player::update(Player& player, std::vector<Monster>& monsters)
         case 'a':
         {
             int monsterNum{ 1 };
-            if (monsters.size() > 1)
+            if (gameCharacters.size() > 2)
             {
                 std::cout << "Which Monster: ";
                 std::cin >> monsterNum;
             }
-            if (monsterNum > 0 && monsterNum <= monsters.size())
+            if (monsterNum > 0 && monsterNum <= gameCharacters.size() - 1)
             {
-
-                monsters[monsterNum - 1].defend(player.attack());
+                gameCharacters[monsterNum]->defend(gameCharacters[0]->attack());
             }
             break;
         }
         case 'h':
-            player.heal();
+            heal();
             break;
         default:
             std::cout << "please enter a or h" << std::endl;
@@ -146,7 +150,7 @@ void Player::print(std::ostream& o) const
 
 std::ostream& operator<<(std::ostream& o, const std::map<Item::Type, Item>& src)
 {
-    std::for_each(src.begin(), src.end(), [&](std::pair<Item::Type, Item> item)
+    std::for_each(src.begin(), src.end(), [&](std::pair<Item::Type, Item> item)->void
     {
         o << "  " << item.second << std::endl;
     });

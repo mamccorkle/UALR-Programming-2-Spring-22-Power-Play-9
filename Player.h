@@ -10,7 +10,7 @@
         Player();
 
         void levelUp();
-        void update(Player& player, std::vector<Monster>& monsters) override;
+        void update( std::vector<Object*> ) override;
 
         int getLevel() const;
         int getSP() const;

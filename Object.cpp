@@ -31,11 +31,13 @@ void Object::print(std::ostream& o) const
         case Object::Type::dragon:
             std::cout << "Dragon";
             break;
+        case Type::numTypes:
+            break;
     }
 
 }
 
-bool Object::isDead()
+bool Object::isDead() const
 {
     return health <= 0;
 }

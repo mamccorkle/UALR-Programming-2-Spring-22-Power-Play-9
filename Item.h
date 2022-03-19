@@ -6,7 +6,7 @@
     class Item
     {
     public:
-        Item() {};
+        Item() = default;
         enum class Type { sword, armor, shield, numTypes };
         Item(Type classification, int bonusValue);
 

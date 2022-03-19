@@ -15,14 +15,14 @@
 
         enum class Type { player, slime, orc, sprite, dragon, numTypes };
 
-        Object() {}
+        Object() = default;
         Object(Type name, int strength, int health, int level);
 
         virtual int attack() const = 0;
         virtual void defend(int damage) = 0;
-        virtual void update(Player& player, std::vector<Monster>& monsters) = 0;
+        virtual void update( std::vector<Object*> ) = 0;
         virtual void print(std::ostream& o) const;
-        bool isDead();
+        bool isDead() const;
         Type getName() const;
         int getLevel() const;
         int getHealth() const;

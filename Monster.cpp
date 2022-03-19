@@ -1,28 +1,25 @@
 #include <iostream>
 
 #include "Monster.h"
-#include "Player.h"
 
-void Monster::update(Player& player, std::vector<Monster>& monsters)
+void Monster::update( std::vector<Object*> gameCharacters )
 {
     std::bernoulli_distribution willAttack(.75);
     if (willAttack(Object::engine))
     {
-
         std::cout << *this << " attacks!" << std::endl;
-        player.defend(attack());
+        gameCharacters[0]->defend(attack());
     }
     else
     {
-
         std::cout << *this << " twiddles its thumbs" << std::endl;
     }
 }
 
-Monster::Monster(const Player& player)
+Monster::Monster( std::vector<Object*> gameCharacters )
 {
     //set level based on player level
-    std::normal_distribution<double> monsterLevel((float)player.getLevel(), player.getLevel() / 4.0);
+    std::normal_distribution<double> monsterLevel((float)gameCharacters[0]->getLevel(), gameCharacters[0]->getLevel() / 4.0);
     level = std::max(1, (int)monsterLevel(engine));
 
     std::uniform_int_distribution<int> monsterType(1, (int)Object::Type::numTypes - 1);
@@ -36,11 +33,11 @@ Monster::Monster(const Player& player)
         case Object::Type::slime:
             strengthVariance = level * 1.5;
             healthVariance = level * 1.25;
-            ACVariance = level / 2;
+            ACVariance = level / 2.0;
             break;
         case Object::Type::orc:
             strengthVariance = level * 2.0;
-            healthVariance = (long long)level * level*.25 ;
+            healthVariance = (double)level * level*.25 ;
             ACVariance = level;
             break;
         case Object::Type::sprite:
@@ -50,8 +47,12 @@ Monster::Monster(const Player& player)
             break;
         case Object::Type::dragon:
             strengthVariance = level * 6.0;
-            healthVariance = (long long)level * level * .5;
+            healthVariance = (double)level * level * .5;
             ACVariance = level * 1.5;
+            break;
+        case Type::player:
+            break;
+        case Type::numTypes:
             break;
     }
 
@@ -74,9 +75,7 @@ int Monster::attack() const
 
 void Monster::defend(int damage)
 {
-
     damageTaken(damage, AC);
-
 }
 
 void Monster::print(std::ostream& o) const
@@ -89,5 +88,4 @@ void Monster::print(std::ostream& o) const
         if (getHealth() > 0)
             o << " h:" << getHealth();
     }
-
 }
